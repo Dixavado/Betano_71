@@ -1,6 +1,5 @@
 import uiautomator2 as u2
 import threading
-import argparse
 import os
 import queue
 import time
@@ -191,7 +190,7 @@ def testar_dispositivo(device, lista_cpf, exibir_resultados, result_queue):
                 else:
                     break
 
-def executar_testes(dispositivos_escolhidos, caminho_arquivo_lista, exibir_resultados=True):
+def executar_testes_em_dispositivos(dispositivos_escolhidos, caminho_arquivo_lista, exibir_resultados=True):
     os.makedirs('resultados', exist_ok=True)
     with open(caminho_arquivo_lista, 'r') as file:
         lista_cpf = [linha.strip() for linha in file]
@@ -213,17 +212,3 @@ def executar_testes(dispositivos_escolhidos, caminho_arquivo_lista, exibir_resul
     while not result_queue.empty():
         results.append(result_queue.get())
     return results
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Executar testes de dispositivos com lista de CPFs.")
-    parser.add_argument('--devices', nargs='+', required=True, help='Lista de dispositivos a serem testados')
-    parser.add_argument('--file', required=True, help='Caminho para o arquivo de lista de CPFs')
-    parser.add_argument('--show-results', action='store_true', help='Exibir resultados no terminal')
-
-    args = parser.parse_args()
-
-    dispositivos = args.devices
-    caminho_arquivo = args.file
-    exibir_resultados = args.show_results
-
-    resultados = executar_testes(dispositivos, caminho_arquivo, exibir_resultados)
